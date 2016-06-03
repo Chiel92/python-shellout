@@ -18,7 +18,7 @@ from shellout import out
 
 files=out(r'find . -name "*.cpp" -o -name "*.h" -print0')
 
-for f in files.z if x:
+for f in files.z:
     print(f)
     matches=out(r"grep -zZ 'some regex pattern' '{filename}'", filename=f)
     print(matches.z)
