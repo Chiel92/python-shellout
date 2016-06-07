@@ -1,6 +1,33 @@
 from subprocess import PIPE, run
 import os
 
+
+def out(command, *args, input=None, verbose=False, **kwargs):
+    shellcommand = command.format(*args, **kwargs)
+    if verbose:
+        print('Running shell command: {}'.format(shellcommand))
+    result = run(shellcommand, input=input, stdout=PIPE,
+                 stderr=PIPE, universal_newlines=True, shell=True)
+    return ShellString(result.stdout + result.stderr)
+
+
+# Python 2/3 compatibility
+try:
+    input = raw_input
+except NameError:
+    pass
+
+
+def confirm(msg, *args, **kwargs):
+    while 1:
+        reply = input(msg.format(*args, **kwargs) + ' [y/n]')
+        if reply == 'y':
+            return True
+        if reply == 'n':
+            return False
+        print("Please type 'y' or 'n'.")
+
+
 class ShellString(str):
 
     """String derivative with a special access attributes.
@@ -56,7 +83,6 @@ class ShellString(str):
     p = paths = property(get_paths)
 
 
-
 class ShellList(list):
     """List derivative with a special access attributes.
 
@@ -106,13 +132,3 @@ class ShellList(list):
             return self.__paths
 
     p = paths = property(get_paths)
-
-
-def out(command, *args, input=None, verbose=False, **kwargs):
-    shellcommand = command.format(*args, **kwargs)
-    if verbose:
-        print('Running shell command: {}'.format(shellcommand))
-    result = run(shellcommand, input=input, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
-    return ShellString(result.stdout + result.stderr)
-
-
