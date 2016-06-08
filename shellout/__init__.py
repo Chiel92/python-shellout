@@ -1,3 +1,6 @@
+"""
+Thin convenience wrappers for shelling out commands easily from python.
+"""
 from subprocess import run, PIPE
 import os
 import sys
