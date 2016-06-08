@@ -14,13 +14,13 @@ $ python3 setup.py install
 ## Example Usage
 
 ```python
-from shellout import out
+from shellout import get
 
-files=out(r'find . -name "*.cpp" -o -name "*.h" -print0')
+files=get(r'find . -name "*.cpp" -o -name "*.h" -print0')
 
 for f in files.z:
     print(f)
-    matches=out(r"grep -zZ 'some regex pattern' '{filename}'", filename=f)
+    matches=get(r"grep -zZ 'some regex pattern' '{filename}'", filename=f)
     print(matches.z)
 ```
 
