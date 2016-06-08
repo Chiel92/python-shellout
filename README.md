@@ -27,4 +27,4 @@ for f in files.z:
 A more elaborate example can be found on [this blog post about automatically archiving merged
 git branches.][archive-git-branches]
 
-archive-git-branches: http://ctenbrinke.net/2016/06/07/archiving-branches-with-git/
+[archive-git-branches]: http://ctenbrinke.net/2016/06/07/archiving-branches-with-git/
