@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/pyshellout.svg)](https://badge.fury.io/py/pyshellout)
+
 # python-shellout
 Thin convenience wrappers for shelling out commands easily from python
 
