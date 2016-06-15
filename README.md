@@ -13,10 +13,16 @@ $ cd python-shellout
 $ python3 setup.py install
 ```
 
+Or to obtain the version from PyPI do
+
+```bash
+$ pip install pyshellout
+```
+
 ## Example Usage
 
 ```python
-from shellout import get
+from pyshellout import get
 
 files=get(r'find . -name "*.cpp" -o -name "*.h" -print0')
 
