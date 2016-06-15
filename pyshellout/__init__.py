@@ -5,6 +5,8 @@ from subprocess import run, PIPE
 import os
 import sys
 
+__all__ = ['out', 'get', 'confirm', 'ShellList', 'ShellString']
+
 # Python 2/3 compatibility
 try:
     input = raw_input
@@ -12,31 +14,51 @@ except NameError:
     pass
 
 
-def out(command, *args, input=None, verbose=False, stdout=sys.stdout, stderr=sys.stderr, **kwargs):
+def shellout(command, *args, input, critical, verbose, stdout, stderr, **kwargs):
+    shellcommand = command.format(*args, **kwargs)
+    if verbose:
+        print('Running shell command: {}'.format(shellcommand))
+
+    result = run(shellcommand, input=input, stdout=stdout,
+                 stderr=stderr, universal_newlines=True, shell=True)
+
+    fatal_error = False
+    if critical and (result.returncode or result.stderr):
+        fatal_error = True
+        if verbose:
+            print('Fatal error. Return code: ' + str(result.returncode))
+
+    return fatal_error, result
+
+
+def out(command, *args, input=None, critical=False, verbose=False, **kwargs):
     """
     Execute given command, with given input, formatted with given arguments, and send output to
     stdout and stderr.
     Return the return code of the subprocess.
     """
-    shellcommand = command.format(*args, **kwargs)
-    if verbose:
-        print('Running shell command: {}'.format(shellcommand))
-    result = run(shellcommand, input=input, stdout=stdout,
-                 stderr=stderr, universal_newlines=True, shell=True)
+    fatal_error, result = shellout(command, *args, input=input, critical=critical, verbose=verbose,
+                                   stdout=sys.stdout, stderr=sys.stderr, **kwargs)
+
+    if fatal_error:
+        sys.exit(result.returncode)
+
     return result.returncode
 
 
-def get(command, *args, input=None, verbose=False, stdout=PIPE, stderr=PIPE, **kwargs):
+def get(command, *args, input=None, critical=False, verbose=False, **kwargs):
     """
     Execute given command, with given input, formatted with given arguments, and return output
     as a ShellString.
     """
-    shellcommand = command.format(*args, **kwargs)
-    if verbose:
-        print('Running shell command: {}'.format(shellcommand))
-    result = run(shellcommand, input=input, stdout=stdout,
-                 stderr=stderr, universal_newlines=True, shell=True)
-    return ShellString(result.stdout + result.stderr)
+    fatal_error, result = shellout(command, *args, input=input, critical=critical, verbose=verbose,
+                                   stdout=PIPE, stderr=PIPE, **kwargs)
+
+    if fatal_error:
+        print(result.stderr, file=sys.stderr)
+        sys.exit(result.returncode)
+
+    return ShellString(result.stdout)
 
 
 def confirm(msg, *args, **kwargs):
