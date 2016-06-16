@@ -24,15 +24,17 @@ $ pip install pyshellout
 ```python
 from pyshellout import get
 
-files=get(r'find . -name "*.cpp" -o -name "*.h" -print0')
+files=get('find . -name "*.cpp" -o -name "*.h" -print0')
 
-for f in files.z:
-    print(f)
-    matches=get(r"grep -zZ 'some regex pattern' '{filename}'", filename=f)
+for f in files.z: # Iterate filenames separated by null bytes
+    print('Current file: ' + f)
+    matches=get("grep -zZ 'some multiline regex pattern' '{}'", f)  # Allows string formatting
     print(matches.z)
 ```
 
 A more elaborate example can be found on [this blog post about automatically archiving merged
 git branches.][archive-git-branches]
+Or on this [this blog post about automatically delete merged local git branches.][delete-git-branches].
 
+[delete-git-branches]: http://ctenbrinke.net/2016/06/16/deleting-merged-local-branches-in-git/
 [archive-git-branches]: http://ctenbrinke.net/2016/06/07/archiving-branches-with-git/
