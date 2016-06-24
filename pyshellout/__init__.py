@@ -99,6 +99,8 @@ class ShellString(str):
             return self.__nlist
         except AttributeError:
             self.__nlist = ShellList(self.split('\n'))
+            if self.__nlist[-1] == '':
+                self.__nlist = self.__nlist[:-1]
             return self.__nlist
 
     n = nlist = property(get_nlist)
@@ -108,6 +110,8 @@ class ShellString(str):
             return self.__zlist
         except AttributeError:
             self.__zlist = ShellList(self.split('\x00'))
+            if self.__zlist[-1] == '':
+                self.__zlist = self.__zlist[:-1]
             return self.__zlist
 
     z = zlist = property(get_zlist)
@@ -117,6 +121,8 @@ class ShellString(str):
             return self.__splist
         except AttributeError:
             self.__splist = ShellList(self.split(' '))
+            if self.__slist[-1] == '':
+                self.__slist = self.__slist[:-1]
             return self.__splist
 
     s = splist = property(get_splist)
