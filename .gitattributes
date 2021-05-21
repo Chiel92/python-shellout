@@ -1,0 +1,17 @@
+# Convert LF to native line endings for text files
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+* text
+
+# Improve diffing for many languages
+*.cs diff=csharp
+*.css diff=css
+*.cpp diff=cpp
+*.hpp diff=cpp
+*.c diff=cpp
+*.h diff=cpp
+*.html diff=html
+*.python diff=python
+*.tex diff=text
